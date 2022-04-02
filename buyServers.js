@@ -39,17 +39,16 @@ export async function main(ns) {
         if (count >= ns.getPurchasedServerLimit() && cash >= cost) {
             let current = queue.peek();   
             if (Math.min(maxRam, Math.pow(2, multi)) <= ns.getServerMaxRam(current)) {
+                await ns.sleep(1000);
                 continue;
             }
+            if (!dryRun) {
+                current = queue.dequeue();
+                ns.killall(current);
+                ns.deleteServer(current);
+            }
             else {
-                if (!dryRun) {
-                    current = queue.dequeue();
-                    ns.killall(current);
-                    ns.deleteServer(current);
-                }
-                else {
-                    ns.tprint(`DRYRUN: would kill a machine for a newer one now!`);
-                }
+                ns.tprint(`DRYRUN: would kill a machine for a newer one now!`);
             }
         }
         else if (count < ns.getPurchasedServerLimit() && cash >= cost) {
