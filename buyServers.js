@@ -38,9 +38,7 @@ export async function main(ns) {
 
         if (count >= ns.getPurchasedServerLimit() && cash >= cost) {
             let current = queue.peek();   
-            if (false && Math.min(maxRam, Math.pow(2, multi)) <= ns.getServerMaxRam(current)) {
-                ns.tprint("bumping ram multi from " + multi + " to " + (multi + 1));
-                multi++;
+            if (Math.min(maxRam, Math.pow(2, multi)) <= ns.getServerMaxRam(current)) {
                 continue;
             }
             else {
