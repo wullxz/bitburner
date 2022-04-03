@@ -489,7 +489,7 @@ function fixParentheses(expression) {
 function findMaxSubArraySum(data) {
 	let vals = [];
 	for (let i=1; i<data.length; i++) {
-		for (let j=0; j<(data.length-i); j++) {
+		for (let j=0; j<(data.length-i+1); j++) {
 			let tmp = data.slice(j, j+i);
 			let sum = tmp.reduce((x, y) => x + y);
 			vals.push(sum);
