@@ -21,7 +21,7 @@ export async function main(ns) {
     let nameCounter = 1;
     let maxRam = Math.pow(2, 20);
     while (true) {
-        if (Math.pow(2, multi) >= maxRam) {
+        if (ns.getServerMaxRam(queue.peek()) == maxRam && queue.length === 25) {
             ns.tprint("maxed on servers, killing process");
             return;
         }
@@ -51,7 +51,7 @@ export async function main(ns) {
                 ns.tprint(`DRYRUN: would kill a machine for a newer one now!`);
             }
         }
-        else if (count < ns.getPurchasedServerLimit() && cash >= cost) {
+        if (count < ns.getPurchasedServerLimit() && cash >= cost) {
             if (!dryRun) {
                 let name = baseName + nameCounter;
                 nameCounter++;
