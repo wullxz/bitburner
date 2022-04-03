@@ -72,7 +72,7 @@ export async function main(ns) {
 		let wTime = ns.getWeakenTime(srv);
 		let failcounter = 0;
 		ns.print(`[${me}][${srv}]: Checking security: ${fcur(base)} | ${fcur(now)} | ${ns.nFormat(now / base, '0.00')} | ${ns.nFormat(wTime / 1000, '00:00:00')} per weaken.`);
-		while (now > (base * 2)) {
+		while (now > (base * 3)) {
 			try {
 				if (failcounter > failThreshold) return;
 				await ns.weaken(srv);

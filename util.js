@@ -11,6 +11,14 @@ export function getParam(args, ...parameter) {
 	return undefined;
 }
 
+export function getListParam(args, delimiter, ...parameter) {
+	let p = getParam(args, ...parameter);
+	if (p)
+		return p.split(delimiter);
+
+	return undefined;
+}
+
 export function getBoolParam(args, ...parameter) {
 	for (const p of parameter) {
 		let idx = args.indexOf(p);
