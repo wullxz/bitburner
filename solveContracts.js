@@ -1,3 +1,5 @@
+import * as util from 'util.js';
+
 export function main(ns) {
     const contracts = getAllServers(ns, "home").flatMap((server) => {
         const onServer = ns.ls(server, ".cct").map((contract) => {
@@ -40,7 +42,7 @@ function solve(type, data, server, contract, ns) {
             solution = findAllValidMathExpr(ns, data);
             break;
         case "Find Largest Prime Factor":
-            solution = factor(data);
+            solution = largestPrimeFactor(ns, data);
             break;
         case "Generate IP Addresses":
             solution = generateIps(data);
@@ -495,4 +497,25 @@ function findMaxSubArraySum(data) {
 	}
 
 	return Math.max(...vals);
+}
+
+function isPrime(ns, n) {
+    if (n <= 1)
+        return false;
+
+    for (let i = 2; i<n/2; i++)
+        if (n % i === 0)
+            return false
+    return true
+}
+
+function largestPrimeFactor(ns, n) {    
+    let factors = [];
+    for (let i = 2; i<n/2; i++) {
+        if (n % i === 0) {
+            if (isPrime(ns, i))
+                factors.push(i);
+        }
+    }
+    return factors.pop();
 }

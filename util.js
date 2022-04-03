@@ -52,3 +52,15 @@ export function rpad(val, paddings) {
 export function allServers(ns) {
 	return JSON.parse(ns.read('servers.json'));
 }
+
+export function range(a, b) {
+	if (!b) {
+		b = a;
+		a = 0;
+	}
+
+	let ar = [...Array(b+1).keys()].slice(a) ;
+	console.log(ar);
+
+	return ar;
+}
