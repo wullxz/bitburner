@@ -21,7 +21,7 @@ export async function main(ns) {
     let nameCounter = 1;
     let maxRam = Math.pow(2, 20);
     while (true) {
-        if (ns.getServerMaxRam(queue.peek()) == maxRam && queue.length === 25) {
+        if (queue.length > 0 && ns.getServerMaxRam(queue.peek()) == maxRam && queue.length === 25) {
             ns.tprint("maxed on servers, killing process");
             return;
         }

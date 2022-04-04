@@ -22,6 +22,16 @@ export async function main(ns) {
 	let choseTopServers = util.getParam(ns.args, '--top-servers', '--topservers') || 15;
 	let me = util.getParam(ns.args, '--hostname');
 
+	function portOpenersAvailable() {
+		let openers = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'SQLInject.exe', 'HTTPWorm.exe'];
+		let count = 0;
+		for (const o of openers) {
+			if (ns.fileExists(o, 'home'))
+				count++
+		}
+		return count;
+	}
+
 	/**
 	* Returns a currency string with a k suffix for 1000.
 	*/
@@ -31,7 +41,7 @@ export async function main(ns) {
 
 	function generateServerList() {
 		let hskill = ns.getHackingLevel();
-		let servers = allServers.filter(s => s.requiredHackingSkill <= hskill).slice(0, choseTopServers);
+		let servers = allServers.filter(s => s.requiredHackingSkill <= hskill && s.numOpenPortsRequired <= portOpenersAvailable()).slice(0, choseTopServers);
 		shuffle(servers);
 		return servers.map(x => x.hostname);
 	}

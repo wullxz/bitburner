@@ -29,13 +29,14 @@ export async function main(ns) {
 
 	for (const sobj of servers) {
 		let s = sobj.hostname
-		let p = params;
+		let p = params.slice(0);
 		p.push('--hostname', s);
+		if (main_script === 'money.js') p.push('-w');
 		try {
 			for (const f of scripts)
 				await ns.scp(f, s);
 			if (s != 'home' && replace) ns.killall(s);
-			ns.exec('launcher.js', s, 1, main_script, '--hostname', s, ...params);
+			ns.exec('launcher.js', s, 1, main_script, ...p);
 			ns.tprint(`[${s}]: run.`);
 		}
 		catch (e) {
