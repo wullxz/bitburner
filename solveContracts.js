@@ -42,7 +42,7 @@ function solve(type, data, server, contract, ns) {
             solution = findAllValidMathExpr(ns, data);
             break;
         case "Find Largest Prime Factor":
-            solution = largestPrimeFactor(ns, data);
+            solution = largestPrimeFactor(data);
             break;
         case "Generate IP Addresses":
             solution = generateIps(data);
@@ -499,23 +499,27 @@ function findMaxSubArraySum(data) {
 	return Math.max(...vals);
 }
 
-function isPrime(ns, n) {
+function isPrime(n) {
     if (n <= 1)
         return false;
 
-    for (let i = 2; i<n/2; i++)
+    for (let i = 2; i<Math.floor(n/2); i++)
         if (n % i === 0)
             return false
+    console.log(`Prime ${n}`);
     return true
 }
 
-function largestPrimeFactor(ns, n) {    
+function largestPrimeFactor(n) {
     let factors = [];
-    for (let i = 2; i<n/2; i++) {
+    for (let i = 2; i<Math.floor(n/2); i++) {
         if (n % i === 0) {
-            if (isPrime(ns, i))
+            if (isPrime(i))
                 factors.push(i);
         }
     }
-    return factors.pop();
+    let largest = factors.pop();
+    if (largest) return largest;
+    if (!largest && isPrime(n)) return n;
+    return 0;
 }
