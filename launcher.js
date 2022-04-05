@@ -11,7 +11,7 @@ export async function main(ns) {
 	ns.tprint(`${serverRam} - ${serverUsed} + ${myRamUsage}`);
 	var free = serverRam - serverUsed + myRamUsage;
 	var scriptUsage = ns.getScriptRam(script);
-	if (me == 'home' && !fillHome) free = free - 35;
+	//if (me == 'home' && !fillHome) free = free - 35;
 	ns.tprint(`[${me}]: ${free} / ${scriptUsage}`);
 	var threads = (free / scriptUsage >> 0);
 	ns.tprint(`[${me}]: ${threads}`);
