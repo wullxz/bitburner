@@ -23,7 +23,7 @@ export async function main(ns) {
 	let me = util.getParam(ns.args, '--hostname');
 
 	function portOpenersAvailable() {
-		let openers = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'SQLInject.exe', 'HTTPWorm.exe'];
+		let openers = ['BruteSSH.exe', 'FTPCrack.exe', 'relaySMTP.exe', 'SQLInject.exe', 'HTTPWorm.exe', 'Formulas.exe'];
 		let count = 0;
 		for (const o of openers) {
 			if (ns.fileExists(o, 'home'))
@@ -53,7 +53,7 @@ export async function main(ns) {
 		let gTime = ns.getGrowTime(srv);
 		let failcounter = 0;
 		ns.print(`[${me}][${srv}]: Checking money: ${fcur(max)} | ${fcur(now)} | ${ns.nFormat(now / max, '0.00 %')} | ${ns.nFormat(gTime / 1000, '00:00:00')} per grow`);
-		while (now < (max * 0.6)) {
+		while (now < (max * 0.5)) {
 			try {
 				if (failcounter > failThreshold) return;
 				await ns.grow(srv);
@@ -69,7 +69,11 @@ export async function main(ns) {
 				let success = (failcounter > failThreshold) ? 'F' : 'S' ;
 				console.log(`[${me}][${srv}]: ${success} | growing run ${counter}. Current money: ${fcur(now)}/${fcur(max)}.`);
 			}
-			if (counter % 10 == 0) await fixHackingDiff(srv);
+			if (counter % 10 == 0) {
+				ns.print(`[${me}][${srv}]: Fixing money: ${fcur(max)} | ${fcur(now)} | ${ns.nFormat(now / max, '0.00 %')} | ${counter} times`);
+				await fixHackingDiff(srv);
+			}
+			if (counter % 50 == 0) break; // enough is enough...
 		}
 		console.log(`[${me}][${srv}]: Fixed money: ${fcur(max)} | ${fcur(now)} | ${ns.nFormat(now / max, '0.00 %')} | ${counter} times`);
 		ns.print(`[${me}][${srv}]: Fixed money: ${fcur(max)} | ${fcur(now)} | ${ns.nFormat(now / max, '0.00 %')} | ${counter} times`);
@@ -82,7 +86,7 @@ export async function main(ns) {
 		let wTime = ns.getWeakenTime(srv);
 		let failcounter = 0;
 		ns.print(`[${me}][${srv}]: Checking security: ${fcur(base)} | ${fcur(now)} | ${ns.nFormat(now / base, '0.00')} | ${ns.nFormat(wTime / 1000, '00:00:00')} per weaken.`);
-		while (now > (base * 3)) {
+		while (now > (base * 5)) {
 			try {
 				if (failcounter > failThreshold) return;
 				await ns.weaken(srv);
@@ -122,7 +126,6 @@ export async function main(ns) {
 					ns.print(`[${me}][${srv}]: grooming...`);
 					await fixHackingDiff(srv);
 					await fixMoneyAvailable(srv);
-					await fixHackingDiff(srv);
 					await hack(srv);
 				}
 				hackCounter = 0;
@@ -132,7 +135,7 @@ export async function main(ns) {
 			}
 			await ns.sleep(50);
 			hackCounter = hackCounter + 1;
-			if (hackCounter % 100 === 0) return;
+			if (hackCounter % 100 === 0) return; // exit mainloop so that we can re-evaluate hackable servers
 		}
 	}
 
