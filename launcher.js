@@ -8,14 +8,16 @@ export async function main(ns) {
 	var myRamUsage = ns.getScriptRam('launcher.js');
 	var serverRam = ns.getServerMaxRam(me);
 	var serverUsed = ns.getServerUsedRam(me);
-	ns.tprint(`${serverRam} - ${serverUsed} + ${myRamUsage}`);
 	var free = serverRam - serverUsed + myRamUsage;
 	var scriptUsage = ns.getScriptRam(script);
-	//if (me == 'home' && !fillHome) free = free - 35;
-	ns.tprint(`[${me}]: ${free} / ${scriptUsage}`);
+	if (me == 'home' && serverRam >= 64 && !fillHome) free = free - 35;
 	var threads = (free / scriptUsage >> 0);
-	ns.tprint(`[${me}]: ${threads}`);
+	ns.tprint(`[${me}]: ${nf(free)} GB free | ${nf(scriptUsage)} GB will be used by ${nf(threads)} threads of ${script}.`);
 
 	if (threads < 1) return;
 	ns.spawn(script, threads, ...args);
+
+	function nf(num) {
+		return ns.nFormat(num, '0.000 a');
+	}
 }
