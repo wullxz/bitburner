@@ -3,6 +3,7 @@ export async function main(ns) {
     // Attribution: Script and info taken from here: https://www.reddit.com/r/Bitburner/comments/rm48o1/the_best_hacking_approach_ive_seen_so_far/
     // I updated this to a managing script that controls purchased servers.
 
+    const nukesec = (ns.args[0] == "--nukesec") ? true : false;
     const hosts = ns.getPurchasedServers();
     let targets = getTargets();
     const scripts = ['hack.js', 'grow.js', 'weaken.js'];
@@ -16,9 +17,10 @@ export async function main(ns) {
     }
 
     for (let index = 0; index <= hosts.length; index++) {
+        if (index == hosts.length && nukesec) break;
         if (index == hosts.length) index = 0;
         let host = hosts[index];
-        if (ripecounter >= 25) await ns.sleep(10000);
+        if (ripecounter >= 25) await ns.sleep(3000);
         if (Date.now() < settings[host]['sleep']) {
             ns.print(`Skipping ${host} because it's not ripe yet!`);
             ripecounter++;
@@ -42,6 +44,11 @@ export async function main(ns) {
         var mm = fserver.moneyMax;
         var ma = ns.getServerMoneyAvailable(target);
 
+        if (nukesec) {
+            ns.exec('weaken.js', host, maxRam / weakenscriptRam, target, 0, 'nukesec');
+            continue;
+        }
+
 
 
         //Priming the server.  Max money and Min security must be acheived for this to work
@@ -50,6 +57,7 @@ export async function main(ns) {
             ns.exec('grow.js', host, maxGrowThreads, target, 0);
             var WeakenTime = (ns.formulas.hacking.weakenTime(fserver, player));
             settings[host]['sleep'] = Date.now() + WeakenTime + 1000;
+            continue;
             ma = ns.getServerMoneyAvailable(host);
             cs = ns.getServerSecurityLevel(host);
 
@@ -61,6 +69,7 @@ export async function main(ns) {
             ns.exec('weaken.js', host, 2000, target, 0);
             WeakenTime = (ns.formulas.hacking.weakenTime(fserver, player));
             settings[host]['sleep'] = Date.now() + WeakenTime + 1000;
+            continue;
             cs = ns.getServerSecurityLevel(host);
         }
 
