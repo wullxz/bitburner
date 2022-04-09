@@ -10,7 +10,7 @@ export async function main(ns) {
             const values = [] ;
 
             headers.push("Karma");
-            values.push(ns.heart.break());
+            values.push(ns.nFormat(ns.heart.break(), '0.000 a'));
 
             head.innerText = headers.join(" \n");
             vals.innerText = values.join("\n");
